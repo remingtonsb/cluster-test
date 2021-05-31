@@ -1,0 +1,19 @@
+1- Create new project 
+oc new-project tomcat-build-app
+
+2- Import image from openshift namespace:
+
+oc import-image docker-registry.default.svc:5000/openshift/jboss-webserver31-tomcat8-openshift:1.2 --confirm
+
+3- Create new build base image iported in last step:
+
+oc new-build docker-registry.default.svc:5000/tomcat-build-app/jboss-webserver31-tomcat8-openshift:1.2 --name=clustertest-access-count --binary=true
+
+4- git clone repository with war file
+git clone https://github.com/remingtonsb/javaapp-clustertest-access-count.git
+
+5-  Start build
+oc start-build cluster-test --from-dir=/home/resantos-redhat.com/javaapp-clustertest-access-count/
+
+6- Create new application based build config 
+oc new-app clustertest-access-count
